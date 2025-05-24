@@ -4,16 +4,27 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 async function createUser(user) {
-  const created = await prisma.user.create({
+
+  const created = await prisma.User.create({
     data:{
-      firstname: user.firstname,
-      lastname: user.lastname,
+      username:user.email,
       email: user.email,
       password: user.password,
-      author: user.author,
     },
   });
+
   return created;
+}
+
+async function userLookUp(user) {
+  const found = await prisma.user.findFirst({
+    where: {
+      email: user.email,
+    },
+  });
+  const match = await bcrypt.compare(user.password, found.password);
+  if (match) return found;
+  else return null;
 }
 
 async function createMessage(message){
@@ -41,4 +52,5 @@ async function findMessages(data){
     createUser,
     createMessage,
     findMessages,
+    userLookUp,
   }
