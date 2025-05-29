@@ -31,7 +31,7 @@ async function login(req, res) {
       id: found.id,
       email: found.email,
     };
-    console.log(user);
+
     if (found !== null) {
       try {
         jwt.sign({ user: user }, process.env.secret,{ expiresIn: '1h' }, (err, token) => {
