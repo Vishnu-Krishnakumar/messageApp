@@ -1,11 +1,14 @@
 
 import {log} from "./serverUtils/server"
-function Login({setLogin,logIn }) {
+function Login({setVerify}) {
 
   async function logIn(formData) {
     const verified = await log(formData);
     console.log(verified);
-    setLogin({user:verified.user, verify:verified.verify});
+    if(verified.verify){
+      setVerify(true);
+    }
+
   }
   return (
     <>
