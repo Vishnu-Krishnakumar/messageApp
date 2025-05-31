@@ -29,15 +29,11 @@ app.use(cookieParser());
 
 app.use("/", loginRoutes );
 
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-//   socket.on('disconnect', () => {
-//     console.log('user disconnected');
-//   });
-// });
+
 io.on('connection',(socket)=>{
   socket.on('submission',(msg)=>{
     console.log('message: ' + msg)
+    io.emit('responses',msg);
   })
 })
 
