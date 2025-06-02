@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { socket } from './socket';
 
-export function MyForm() {
+export function MyForm({setFooEvents}) {
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -11,7 +11,9 @@ export function MyForm() {
 
     socket.timeout(5000).emit('submission', value, () => {
       setIsLoading(false);
+      
     });
+ 
   }
 
   return (

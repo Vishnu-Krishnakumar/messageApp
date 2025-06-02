@@ -5,25 +5,25 @@ async function log(formData) {
       password: formData.get("password"),
     };
     let verified = {};
-    await fetch("http://localhost:3000/login", {
-      mode: "cors",
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-
-        localStorage.setItem("authToken", response.token);
-        let tokenArray = response.token.split('.');
-        let user = JSON.parse(atob(tokenArray[1])).user;
-        verified = {user:user , verify: true}
-      })
-      .catch((error) => console.error(error));
-      return verified;
+    try{
+      const response = await  fetch("http://localhost:3000/login",{
+        mode: "cors",
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+      localStorage.setItem("authToken", data.token);
+      let tokenArray = data.token.split('.');
+      let user = JSON.parse(atob(tokenArray[1])).user;
+      verified = {user:user,verify:true}
+    }catch(error){
+      console.log(error)
+    }
+    return verified;
   }
 
 async function register(formData){

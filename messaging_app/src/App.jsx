@@ -31,20 +31,36 @@ function App() {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('foo', onFooEvent);
+    
+    socket.on('responses', (msg)=>{
+      console.log(msg);
+      setFooEvents(previous => [...previous, msg]);
+    });
 
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
       socket.off('foo', onFooEvent);
+      socket.off('responses');
     };
     }, []);
-
+ 
     return (
       <div className="App">
-        <ConnectionState isConnected={ isConnected } />
-        <Events events={ fooEvents } />
-        <ConnectionManager />
-        <MyForm />
+        {(!verify? (
+          <div>
+            <Login setVerify = {setVerify}></Login>
+            <Link to ="register">Register a new account!</Link>
+          </div>):( 
+          <div>
+            <ConnectionState isConnected={ isConnected } />
+            <Events events={ fooEvents } />
+            <ConnectionManager />
+            <MyForm setFooEvents ={setFooEvents}/>
+          </div>
+          ))
+       }
+        
       </div>
     );
 
