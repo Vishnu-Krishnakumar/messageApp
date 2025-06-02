@@ -26,6 +26,14 @@ async function userLookUp(user) {
   if (match) return found;
   else return null;
 }
+async function userVerify(user) {
+  const found = await prisma.user.findUnique({
+    where: {
+      email: user.email,
+    },
+  });
+  return found;
+}
 
 async function createMessage(message){
   const created = await prisma.message.create({
@@ -53,4 +61,5 @@ async function findMessages(data){
     createMessage,
     findMessages,
     userLookUp,
+    userVerify,
   }

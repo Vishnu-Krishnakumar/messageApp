@@ -6,6 +6,9 @@ const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
 const loginRoutes = require("./routes/loginRoute");
+const messageRoutes = require("./routes/messageRoute");
+const query = require("./database/db");
+const { find } = require("./validation/validation");
 // const auth = require("./auth/auth");
 
 const app = express();
@@ -28,15 +31,30 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use("/", loginRoutes );
+app.use("/",messageRoutes);
 
-
-io.on('connection',(socket)=>{
-  socket.on('submission',(msg)=>{
-    console.log('message: ' + msg)
-    io.emit('responses',msg);
+io.on('connection', (socket)=>{
+  console.log("A user is trying to connect");
+  socket.on('authentication', async (token)=>{
+    let tokenArray = token.token.split('.');
+    let user = JSON.parse(atob(tokenArray[1])).user;
+    let found = await query.userVerify(user);
+    console.log(found);
+    if(found){
+      console.log("test");
+      io.emit('responses',`User ${found.username} has connected!`)
+    }
+    else{
+      io.disconnect(true);
+    }
   })
-})
+});
+
+
 
 server.listen(3000, () => {
     console.log(`Listening to port 3000`); 
   });
+
+
+  module.exports.io= io;
