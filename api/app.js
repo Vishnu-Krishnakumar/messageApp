@@ -33,23 +33,35 @@ app.use(cookieParser());
 app.use("/", loginRoutes );
 app.use("/",messageRoutes);
 
-io.on('connection', (socket)=>{
+io.use(async (socket,next)=>{
   console.log("A user is trying to connect");
-  socket.on('authentication', async (token)=>{
-    let tokenArray = token.token.split('.');
-    let user = JSON.parse(atob(tokenArray[1])).user;
+  try{
+    let token = socket.handshake.auth.token;
+    if(!token) return next(new Error("No Token provided"));
+    token = token.split(".");
+    let user = JSON.parse(atob(token[1])).user;
     let found = await query.userVerify(user);
-    console.log(found);
     if(found){
-      console.log("test");
-      io.emit('responses',`User ${found.username} has connected!`)
+      socket.user = found;
+      return next()
     }
     else{
-      io.disconnect(true);
+      return next(new Error("Auth failed"));
     }
+  }catch(error){
+    console.error(error);
+    return next(new error("Auth Error"));
+  };
+})
+
+io.on('connection', (socket) => {
+  console.log(`User ${socket.user.username} connected`);
+  io.emit('responses', `User ${socket.user.username} has connected!`);
+  socket.on('submission',(msg)=>{
+    console.log(msg);
+    io.emit('responses',msg);
   })
 });
-
 
 
 server.listen(3000, () => {

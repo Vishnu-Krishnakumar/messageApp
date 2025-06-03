@@ -32,6 +32,7 @@ async function userVerify(user) {
       email: user.email,
     },
   });
+  console.log(found);
   return found;
 }
 
