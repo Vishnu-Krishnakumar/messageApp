@@ -5,8 +5,8 @@ export function ConnectionManager() {
   function connect() {
     if (localStorage.getItem('authToken')) {
       socket.connect();
-      console.log(localStorage.getItem('authToken'));
-      socket.emit('authentication', { token: localStorage.getItem('authToken') });
+      let token = localStorage.getItem('authToken');
+      socket.emit('authentication', { token });
     }
   }
 
