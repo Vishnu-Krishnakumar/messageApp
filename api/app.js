@@ -57,13 +57,24 @@ io.use(async (socket,next)=>{
 io.on('connection', (socket) => {
   console.log(`User ${socket.user.username} connected`);
   io.emit('responses', `User ${socket.user.username} has connected!`);
+  const users = [];
+  for (let [id,socket] of io.of("/").sockets){
+    users.push({
+      userID:id,
+      userName:socket.user.username
+    });
+  }
+  io.emit("users",users);
   socket.on('submission',(msg)=>{
     console.log(msg);
     socket.broadcast.emit('responses',msg);
   })
+
   socket.on('disconnect',()=>{
     console.log(`User ${socket.user.username} disconnected`);
     io.emit('responses',`User ${socket.user.username} disconnected`);
+    
+    io.emit("users",users);
   })
 });
 
@@ -75,4 +86,3 @@ server.listen(3000, () => {
   });
 
 
-  module.exports.io= io;
