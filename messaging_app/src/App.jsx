@@ -9,12 +9,13 @@ import { ConnectionState } from './ConnectionState.jsx';
 import { ConnectionManager } from './ConnectionManager.jsx';
 import { Events } from "./Events";
 import { MyForm } from './MyForm.jsx';
+import { Users } from './Users.jsx'
 function App() {
   const [count, setCount] = useState(0);
   const [verify, setVerify] = useState(false);
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [fooEvents, setFooEvents] = useState([]);
-
+  const [users,setUsers] = useState([]);
   useEffect(() => {
     function onConnect() {
       setIsConnected(true);
@@ -36,7 +37,11 @@ function App() {
       console.log(msg);
       setFooEvents(previous => [...previous, msg]);
     });
-
+    socket.on('users',(newUser)=>{
+      console.log(newUser);
+      setUsers(newUser);
+      console.log(users);
+    })
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
@@ -53,6 +58,7 @@ function App() {
             <Link to ="register">Register a new account!</Link>
           </div>):( 
           <div>
+            <Users users ={users}></Users>
             <ConnectionState isConnected={ isConnected } />
             <Events events={ fooEvents } />
             <ConnectionManager />
