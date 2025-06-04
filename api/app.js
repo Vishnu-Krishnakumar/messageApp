@@ -59,9 +59,15 @@ io.on('connection', (socket) => {
   io.emit('responses', `User ${socket.user.username} has connected!`);
   socket.on('submission',(msg)=>{
     console.log(msg);
-    io.emit('responses',msg);
+    socket.broadcast.emit('responses',msg);
+  })
+  socket.on('disconnect',()=>{
+    console.log(`User ${socket.user.username} disconnected`);
+    io.emit('responses',`User ${socket.user.username} disconnected`);
   })
 });
+
+
 
 
 server.listen(3000, () => {
