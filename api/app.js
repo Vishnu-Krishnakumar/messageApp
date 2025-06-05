@@ -10,7 +10,6 @@ const messageRoutes = require("./routes/messageRoute");
 const query = require("./database/db");
 const { find } = require("./validation/validation");
 // const auth = require("./auth/auth");
-
 const app = express();
 const server = createServer(app);
 const io = new Server(server,{
@@ -19,6 +18,7 @@ const io = new Server(server,{
     credentials: true,
   }
 });
+
 app.use(
   cors({
     origin: ["http://localhost:5173","http://localhost:3000", "http://127.0.0.1:5173"],
@@ -29,7 +29,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 app.use(cookieParser());
-
 app.use("/", loginRoutes );
 app.use("/",messageRoutes);
 
@@ -40,6 +39,7 @@ io.use(async (socket,next)=>{
     if(!token) return next(new Error("No Token provided"));
     token = token.split(".");
     let user = JSON.parse(atob(token[1])).user;
+    console.log(user);
     let found = await query.userVerify(user);
     if(found){
       socket.user = found;
@@ -54,29 +54,7 @@ io.use(async (socket,next)=>{
   };
 })
 
-io.on('connection', (socket) => {
-  console.log(`User ${socket.user.username} connected`);
-  io.emit('responses', `User ${socket.user.username} has connected!`);
-  const users = [];
-  for (let [id,socket] of io.of("/").sockets){
-    users.push({
-      userID:id,
-      userName:socket.user.username
-    });
-  }
-  io.emit("users",users);
-  socket.on('submission',(msg)=>{
-    console.log(msg);
-    socket.broadcast.emit('responses',msg);
-  })
-
-  socket.on('disconnect',()=>{
-    console.log(`User ${socket.user.username} disconnected`);
-    io.emit('responses',`User ${socket.user.username} disconnected`);
-    
-    io.emit("users",users);
-  })
-});
+require("./socket")(io);
 
 
 
