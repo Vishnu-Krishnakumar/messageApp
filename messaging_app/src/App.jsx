@@ -9,7 +9,8 @@ import { ConnectionState } from './ConnectionState.jsx';
 import { ConnectionManager } from './ConnectionManager.jsx';
 import { Events } from "./Events";
 import { MyForm } from './MyForm.jsx';
-import { Users } from './Users.jsx'
+import { Users } from './Users.jsx';
+import LogOut  from './LogOut.jsx';
 function App() {
   const [count, setCount] = useState(0);
   const [verify, setVerify] = useState(false);
@@ -17,6 +18,26 @@ function App() {
   const [fooEvents, setFooEvents] = useState([]);
   const [users,setUsers] = useState([]);
   useEffect(() => {
+
+    try{
+      let token = localStorage.getItem("authToken");
+      console.log(token);
+      if(token === null) {
+        setVerify(false);
+        return;
+      } 
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      token = token.split('.');
+      let exp = JSON.parse(atob(token[1])).exp;
+      token = JSON.parse(atob(token[1])).user;
+      if(exp < currentTimestamp){
+        return console.log("token expired")
+      }
+      else{
+         setVerify(true);
+      } 
+    }catch(error){console.log(error)}
+
     function onConnect() {
       setIsConnected(true);
     }
@@ -58,6 +79,7 @@ function App() {
             <Link to ="register">Register a new account!</Link>
           </div>):( 
           <div>
+            <LogOut setVerify = {setVerify}></LogOut>
             <Users users ={users}></Users>
             <ConnectionState isConnected={ isConnected } />
             <Events events={ fooEvents } />
@@ -69,17 +91,6 @@ function App() {
         
       </div>
     );
-
-
-  // return (
-  //   <>
-  //   {(!verify? (<div>
-  //     <Login setVerify = {setVerify}></Login>
-  //     <Link to ="register">Register a new account!</Link>
-  //     </div>):null)
-  //    }
-  //   </>
-  // )
 }
 
 export default App
