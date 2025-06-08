@@ -5,7 +5,7 @@ export function Events({ events }) {
     <ul>
     {
       events.map((event, index) =>
-        <li key={ index }>{ event }</li>
+        <li key={ index }>{ event.userName } : {event.msg}</li>
       )
     }
     </ul>

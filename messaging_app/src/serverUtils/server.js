@@ -16,7 +16,9 @@ async function log(formData) {
         body: JSON.stringify(body),
       });
       const data = await response.json();
+      console.log(data.token);
       localStorage.setItem("authToken", data.token);
+      console.log(localStorage.getItem('authToken'));
       let tokenArray = data.token.split('.');
       let user = JSON.parse(atob(tokenArray[1])).user;
       verified = {user:user,verify:true}

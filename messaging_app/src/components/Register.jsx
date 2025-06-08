@@ -1,4 +1,4 @@
-import { register } from "./serverUtils/server";
+import { register } from "../serverUtils/server";
 
 function Register(){
   async function registration(formData){

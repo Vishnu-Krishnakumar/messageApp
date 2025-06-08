@@ -1,5 +1,5 @@
 
-import {log} from "./serverUtils/server"
+import {log} from "../serverUtils/server"
 function Login({setVerify}) {
 
   async function logIn(formData) {
