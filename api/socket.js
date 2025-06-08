@@ -1,19 +1,31 @@
 module.exports = function(io){
   io.on('connection', (socket) => {
     console.log(`User ${socket.user.username} connected`);
-    io.emit('responses', `User ${socket.user.username} has connected!`);
+    io.emit('responses', `User ${socket.user.username} has connected!`,socket.user.username);
     let users = [];
     for (let [id,sock] of io.of("/").sockets){
+      console.log(sock);
       users.push({
-        userID:id,
-        userName:sock.user.username
+        userID:sock.user.id,
+        userName:sock.user.username,
+        socketId:id,
       });
     }
+    console.log(users);
   io.emit("users",users);
+
   socket.on('submission',(msg)=>{
     console.log(msg);
-    socket.broadcast.emit('responses',msg);
+    io.emit('responses',msg, socket.user.username);
   });
+
+  socket.on('privateMessage',async(msg,id)=>{
+   console.log("test " + id);
+   socket.to(id).emit("privateMessage",{
+    msg,
+    from:socket.id,
+   });
+  })
 
   socket.on('disconnect',()=>{
     console.log(`User ${socket.user.username} disconnected`);
@@ -27,5 +39,6 @@ module.exports = function(io){
     }
     io.emit("users",users);
   });
+
 });
 }

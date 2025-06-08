@@ -36,8 +36,10 @@ io.use(async (socket,next)=>{
   console.log("A user is trying to connect");
   try{
     let token = socket.handshake.auth.token;
+    console.log(socket.handshake);
     if(!token) return next(new Error("No Token provided"));
     token = token.split(".");
+    console.log(token);
     let user = JSON.parse(atob(token[1])).user;
     console.log(user);
     let found = await query.userVerify(user);
@@ -50,10 +52,11 @@ io.use(async (socket,next)=>{
     }
   }catch(error){
     console.error(error);
-    return next(new error("Auth Error"));
+    return next(new Error("Auth Error"));
   };
 })
 
+io.use();
 require("./socket")(io);
 
 

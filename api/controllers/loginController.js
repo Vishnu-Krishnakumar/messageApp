@@ -30,7 +30,6 @@ async function login(req, res) {
     const user = {
       id: found.id,
       email: found.email,
-      sessionId: uuidv4(),
     };
     console.log(user);
     if (found !== null) {
