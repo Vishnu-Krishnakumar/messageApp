@@ -11,8 +11,9 @@ module.exports = function(io){
         socketId:id,
       });
     }
-    console.log(users);
+
   io.emit("users",users);
+
 
   socket.on('submission',(msg)=>{
     console.log(msg);
@@ -20,10 +21,11 @@ module.exports = function(io){
   });
 
   socket.on('privateMessage',async(msg,id)=>{
-   console.log("test " + id);
-   socket.to(id).emit("privateMessage",{
+
+  socket.to(id).emit("privateMessage",{
     msg,
     from:socket.id,
+    userName: socket.user.username,
    });
   })
 

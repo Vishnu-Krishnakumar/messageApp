@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser")
+require("dotenv").config();
 const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
@@ -9,6 +10,7 @@ const loginRoutes = require("./routes/loginRoute");
 const messageRoutes = require("./routes/messageRoute");
 const query = require("./database/db");
 const { find } = require("./validation/validation");
+const jwt = require("jsonwebtoken");
 // const auth = require("./auth/auth");
 const app = express();
 const server = createServer(app);
@@ -36,13 +38,10 @@ io.use(async (socket,next)=>{
   console.log("A user is trying to connect");
   try{
     let token = socket.handshake.auth.token;
-    console.log(socket.handshake);
     if(!token) return next(new Error("No Token provided"));
-    token = token.split(".");
-    console.log(token);
-    let user = JSON.parse(atob(token[1])).user;
-    console.log(user);
-    let found = await query.userVerify(user);
+    const decode = jwt.verify(token, process.env.secret);
+    if(decode === undefined) return next(new Error("Invalid Token!"));
+    let found = await query.userVerify(decode.user);
     if(found){
       socket.user = found;
       return next()
