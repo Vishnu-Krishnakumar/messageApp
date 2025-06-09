@@ -15,10 +15,12 @@ import LogOut  from './components/LogOut.jsx';
 import MessageBox from './components/MessageBox.jsx'
 function App() {
   const [count, setCount] = useState(0);
+  const [userTarget,setTarget] = useState('');
   const [verify, setVerify] = useState(false);
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [fooEvents, setFooEvents] = useState([]);
   const [users,setUsers] = useState([]);
+  const [privateMessage, setPrivate] = useState([]);
   useEffect(() => {
 
     try{
@@ -50,7 +52,6 @@ function App() {
 
     function onDisconnect() {
       setIsConnected(false);
-      // localStorage.removeItem("authToken");
     }
 
     function onFooEvent(value) {
@@ -89,8 +90,8 @@ function App() {
           </div>):( 
           <div>
             <LogOut setVerify = {setVerify}></LogOut>
-            <Users users ={users}></Users>
-            <MessageBox></MessageBox>
+            <Users users ={users} setTarget = {setTarget} userTarget = {userTarget} setPrivate ={setPrivate}></Users>
+            <MessageBox privateMessage ={privateMessage} setPrivate ={setPrivate} userTarget ={userTarget}></MessageBox>
             <ConnectionState isConnected={ isConnected } />
             <Events events={ fooEvents } />
             <ConnectionManager />
