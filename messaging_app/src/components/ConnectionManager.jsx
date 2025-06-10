@@ -1,7 +1,7 @@
 
 import { socket } from '../socket';
 
-export function ConnectionManager() {
+export function ConnectionManager({users,setUsers,setIsConnected}) {
   
   function connect() {
     if (localStorage.getItem('authToken')) {
@@ -10,12 +10,20 @@ export function ConnectionManager() {
       console.log(token);
       socket.auth.token = token;
       socket.emit('authentication',  token );
+      socket.on('users',(newUser)=>{
+        setUsers(newUser);
+        console.log(users);
+        setIsConnected(true);
+      })
+      
     }
   }
 
   function disconnect() {
   
     socket.disconnect();
+    setUsers([]);
+    setIsConnected(false);
   }
 
   return (

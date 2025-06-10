@@ -1,12 +1,19 @@
 import { useState,useEffect } from 'react'
 import { socket } from '../socket';
-
-function MessageBox({userTarget,privateMessage,setPrivate}){
+import { directMessage } from '../serverUtils/server';
+function MessageBox({userTarget,privateMessage,setPrivate,verify}){
   const [value, setValue] = useState('');
 
-  function onSubmit(event){
-    event.preventDefault();
-    socket.emit('privateMessage',value,userTarget);
+  async function onSubmit(formData){
+    console.log(verify);
+    console.log(userTarget);
+    if(parseInt(userTarget.userID) !== verify.id){
+      const message = await directMessage(value,userTarget.id,verify.id);
+      console.log(message);
+      if(message){
+        socket.emit('privateMessage',value,userTarget.socketId);
+      }
+    }
   }
 
 
@@ -14,7 +21,7 @@ function MessageBox({userTarget,privateMessage,setPrivate}){
     socket.on('privateMessage',(content)=>{
       console.log(content.from );
       console.log(userTarget);
-      if(content.from === userTarget){
+      if(content.from === userTarget.socketId){
         setPrivate(privateMessage => [...privateMessage,{msg:content.msg,userName:content.userName}]);
       }
     })
@@ -24,8 +31,8 @@ function MessageBox({userTarget,privateMessage,setPrivate}){
   },[userTarget]);
 
   return(
-    <div>
-      <div className="chatBox">
+    <div className="messageBox">
+      <div className="chatMessages">
           {
             privateMessage.map((message,index)=>
               <p key = {index}>{`${message.userName}: ${message.msg}`}</p>
@@ -33,7 +40,7 @@ function MessageBox({userTarget,privateMessage,setPrivate}){
           }
       </div>
       <div className='messageSend'> 
-        <form onSubmit={ onSubmit }>
+        <form action={ onSubmit }>
           <input  onChange={ e => setValue(e.target.value)}/>
           <button type="submit" >Submit</button>
         </form>

@@ -15,8 +15,8 @@ import LogOut  from './components/LogOut.jsx';
 import MessageBox from './components/MessageBox.jsx'
 function App() {
   const [count, setCount] = useState(0);
-  const [userTarget,setTarget] = useState('');
-  const [verify, setVerify] = useState(false);
+  const [userTarget,setTarget] = useState({});
+  const [verify, setVerify] = useState({id:-1,verify:false});
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [fooEvents, setFooEvents] = useState([]);
   const [users,setUsers] = useState([]);
@@ -25,24 +25,23 @@ function App() {
 
     try{
       let token = localStorage.getItem("authToken");
-
       console.log(token);
-
       if(token === null) {
-        setVerify(false);
+        setVerify({id:-1,verify:false});
         return;
       } 
       const currentTimestamp = Math.floor(Date.now() / 1000);
       token = token.split('.');
       let exp = JSON.parse(atob(token[1])).exp;
       token = JSON.parse(atob(token[1])).user;
+      console.log(token);
       if(exp < currentTimestamp){
         localStorage.removeItem("authToken");
         return console.log("token expired");
         
       }
       else{
-         setVerify(true);
+         setVerify({id:token.id,verify:true});
       } 
     }catch(error){console.log(error)}
 
@@ -77,24 +76,25 @@ function App() {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
       socket.off('foo', onFooEvent);
-      socket.off('responses');
+
     };
     }, []);
- 
+
+
     return (
       <div className="App">
-        {(!verify? (
+        {(!verify.verify? (
           <div>
             <Login setVerify = {setVerify}></Login>
             <Link to ="register">Register a new account!</Link>
           </div>):( 
           <div>
             <LogOut setVerify = {setVerify}></LogOut>
+            <MessageBox verify = {verify} privateMessage ={privateMessage} setPrivate ={setPrivate} userTarget ={userTarget}></MessageBox>
             <Users users ={users} setTarget = {setTarget} userTarget = {userTarget} setPrivate ={setPrivate}></Users>
-            <MessageBox privateMessage ={privateMessage} setPrivate ={setPrivate} userTarget ={userTarget}></MessageBox>
-            <ConnectionState isConnected={ isConnected } />
+            <ConnectionState isConnected={ isConnected }  />
             <Events events={ fooEvents } />
-            <ConnectionManager />
+            <ConnectionManager setUsers = {setUsers} users = {users}  setIsConnected= {setIsConnected} />
             <MyForm setFooEvents ={setFooEvents}/>
           </div>
           ))
