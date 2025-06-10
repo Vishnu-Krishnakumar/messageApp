@@ -4,7 +4,7 @@ module.exports = function(io){
     io.emit('responses', `User ${socket.user.username} has connected!`,socket.user.username);
     let users = [];
     for (let [id,sock] of io.of("/").sockets){
-      console.log(sock);
+
       users.push({
         userID:sock.user.id,
         userName:sock.user.username,

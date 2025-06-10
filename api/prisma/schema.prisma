@@ -21,17 +21,13 @@ model User {
   username         String
   email            String     @unique
   password         String
-  sentMessages     Message[]  @relation("sentMessages")
-  receivedMessages Message[]  @relation("receivedMessages")
 }
 
 model Message { 
   id           Int        @id @default(autoincrement())
   createdAt    DateTime   @default(now())
   message      String     @db.Text
-  sender       User       @relation("sentMessages",fields: [senderId], references: [id])
   senderId     Int
-  receiver     User       @relation("receivedMessages",fields: [receiverId], references: [id])
   receiverId   Int
-  groupId      String
+  groupId      String?
 }

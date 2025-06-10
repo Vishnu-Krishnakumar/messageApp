@@ -40,8 +40,8 @@ async function createMessage(message){
   const created = await prisma.message.create({
     data:{
       message:message.message,
-      sender:message.sender,
-      receiever:message.receiver,
+      senderId:message.senderId,
+      receiverId:message.receiverId,
     }
   })
   return created;
@@ -51,7 +51,8 @@ async function findMessages(data){
   const messages = await prisma.message.findMany({ 
     data:{
       where:{
-        receiver: data.id, 
+        sender: data.senderId,
+        receiver: data.recieverId, 
       }
     }
   })

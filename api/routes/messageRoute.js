@@ -9,4 +9,9 @@ messageRoutes.get(
   auth.passport.authenticate("jwt",{session:false}),
   messageController.test 
 );
+messageRoutes.post(
+  "/directMessage",
+  auth.passport.authenticate("jwt",{session:false}),
+  messageController.directMessage
+); 
 module.exports = messageRoutes;
