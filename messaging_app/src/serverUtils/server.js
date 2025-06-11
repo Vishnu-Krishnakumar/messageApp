@@ -80,9 +80,9 @@ async function directMessage(message,receiverId,userId){
   }
 }
 
-async function retrieveMessages(receiverId,userId){
+async function retrieveMessages(senderId,userId){
   const body ={
-    receiverId : receiverId,
+    senderId : senderId,
     userId : userId,
   }
   try{
@@ -95,8 +95,9 @@ async function retrieveMessages(receiverId,userId){
       },
       body:JSON.stringify(body),
     });
+    const data = response.json();
     if(response.status === 200){
-      return response.messages;
+      return data;
     }
     else return false;
   }catch(error){

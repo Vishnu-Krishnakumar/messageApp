@@ -1,14 +1,17 @@
 import { useState,useEffect } from 'react'
 import { socket } from '../socket';
-import { directMessage } from '../serverUtils/server';
+import { directMessage,retrieveMessages } from '../serverUtils/server';
 function MessageBox({userTarget,privateMessage,setPrivate,verify}){
   const [value, setValue] = useState('');
-
+  const [history,setHistory] = useState([]);
+  
   async function onSubmit(formData){
     console.log(verify);
     console.log(userTarget);
-    if(parseInt(userTarget.userID) !== verify.id){
-      const message = await directMessage(value,userTarget.id,verify.id);
+    if(parseInt(userTarget.id) !== verify.user.id){
+      const history = await retrieveMessages(userTarget.id,verify.user.id);
+      console.log(history);
+      const message = await directMessage(value,userTarget.id,verify.user.id);
       console.log(message);
       if(message){
         socket.emit('privateMessage',value,userTarget.socketId);
