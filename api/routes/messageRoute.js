@@ -13,5 +13,11 @@ messageRoutes.post(
   "/directMessage",
   auth.passport.authenticate("jwt",{session:false}),
   messageController.directMessage
-); 
+);
+messageRoutes.post(
+  "/retrieveHistory",
+  auth.passport.authenticate("jwt",{session:false}),
+  messageController.retrieveHistory
+)
+
 module.exports = messageRoutes;

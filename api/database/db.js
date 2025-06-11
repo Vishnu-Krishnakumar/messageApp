@@ -49,13 +49,12 @@ async function createMessage(message){
 
 async function findMessages(data){
   const messages = await prisma.message.findMany({ 
-    data:{
-      where:{
-        sender: data.senderId,
-        receiver: data.recieverId, 
-      }
+    where:{
+      senderId: data.senderId,
+      receiverId: data.receiverId, 
     }
   })
+  return messages;
 }
 
   module.exports ={

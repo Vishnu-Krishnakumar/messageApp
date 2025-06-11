@@ -44,8 +44,24 @@ async function directMessage(req,res){
   }
 }
 
+async function retrieveHistory(req,res){
+  const user = {
+    senderId:req.body.senderId,
+    receiverId:req.body.userId,
+  }
+  const history = await queries.findMessages(user);
+  console.log(history);
+  if(history) res.status(200).json({
+    message:history,
+  });
+  else
+  res.status(500).json({
+    message:null,
+  });
+}
 module.exports ={ 
   connectUsers,
   test,
   directMessage,
+  retrieveHistory,
 };
