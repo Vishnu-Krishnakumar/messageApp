@@ -25,7 +25,7 @@ async function test(req,res){
   })
 }
 async function directMessage(req,res){
-  console.log(req.body);
+
   const message ={
     message:req.body.message,
     senderId:req.body.senderId,
@@ -50,15 +50,14 @@ async function retrieveHistory(req,res){
     receiverId:req.body.userId,
   }
   const history = await queries.findMessages(user);
-  console.log(history);
-  if(history) res.status(200).json({
-    message:history,
-  });
+
+  if(history) res.status(200).json(history);
   else
   res.status(500).json({
     message:null,
   });
 }
+
 module.exports ={ 
   connectUsers,
   test,

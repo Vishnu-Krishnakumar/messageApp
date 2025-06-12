@@ -1,6 +1,6 @@
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
-const queries = require("../database/db");
+  const queries = require("../database/db");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
 
@@ -31,7 +31,7 @@ async function login(req, res) {
       id: found.id,
       email: found.email,
     };
-    console.log(user);
+
     if (found !== null) {
       try {
         jwt.sign({ user: user }, process.env.secret,{ expiresIn: '1h' }, (err, token) => {

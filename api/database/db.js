@@ -32,7 +32,7 @@ async function userVerify(user) {
       email: user.email,
     },
   });
-  console.log(found);
+
   return found;
 }
 
@@ -50,11 +50,51 @@ async function createMessage(message){
 async function findMessages(data){
   const messages = await prisma.message.findMany({ 
     where:{
-      senderId: data.senderId,
-      receiverId: data.receiverId, 
+      OR:[
+        {
+          senderId:data.senderId,
+          receiverId:data.receiverId,
+        },
+        {
+          senderId:data.receiverId,
+          receiverId:data.senderId,
+        },
+      ],
+    },
+    orderBy:{
+      createdAt:'asc',
     }
   })
-  return messages;
+  const users = await prisma.user.findMany({
+    where:{
+      OR:[
+        {
+          id:data.senderId,
+        },
+        {
+          id:data.receiverId,
+        }
+      ]
+    }
+  })
+
+  let userMessages = []
+  for(const message of messages){
+    let userName = '';
+
+    for(const user of users){
+
+      if (message.senderId === user.id) userName = user.username 
+    }
+    userMessages.push({
+      userName:userName,
+      message:message.message,
+      receiverId:message.receiverId,
+      senderId:message.senderId,
+    })
+  }
+
+  return {userMessages};
 }
 
   module.exports ={
