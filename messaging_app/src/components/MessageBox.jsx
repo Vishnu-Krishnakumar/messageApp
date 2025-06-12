@@ -15,6 +15,7 @@ function MessageBox({userTarget,privateMessage,setPrivate,verify}){
       console.log(message);
       if(message){
         socket.emit('privateMessage',value,userTarget.socketId);
+        setPrivate(privateMessage => [...privateMessage,{msg:value,userName:verify.user.email}])
       }
     }
   }
@@ -36,6 +37,7 @@ function MessageBox({userTarget,privateMessage,setPrivate,verify}){
   return(
     <div className="messageBox">
       <div className="chatMessages">
+        <h2>{userTarget.userName}</h2>
           {
             privateMessage.map((message,index)=>
               <p key = {index}>{`${message.userName}: ${message.msg}`}</p>

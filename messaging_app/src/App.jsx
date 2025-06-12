@@ -61,10 +61,10 @@ function App() {
     socket.on('disconnect', onDisconnect);
     socket.on('foo', onFooEvent);
     
-    socket.on('responses', (msg,userName)=>{
-      console.log(userName);
-      setFooEvents(previous => [...previous, {msg,userName}]);
-    });
+    // socket.on('responses', (msg,userName)=>{
+    //   console.log(userName);
+    //   setFooEvents(previous => [...previous, {msg,userName}]);
+    // });
 
     socket.on('users',(newUser)=>{
       console.log("emitted " + newUser);
@@ -88,14 +88,18 @@ function App() {
             <Login setVerify = {setVerify}></Login>
             <Link to ="register">Register a new account!</Link>
           </div>):( 
-          <div>
+          <div className='Main'>
             <LogOut setVerify = {setVerify}></LogOut>
-            <MessageBox verify = {verify} privateMessage ={privateMessage} setPrivate ={setPrivate} userTarget ={userTarget}></MessageBox>
-            <Users users ={users} setTarget = {setTarget} userTarget = {userTarget} setPrivate ={setPrivate}></Users>
-            <ConnectionState isConnected={ isConnected }  />
-            <Events events={ fooEvents } />
-            <ConnectionManager setUsers = {setUsers} users = {users}  setIsConnected= {setIsConnected} />
-            <MyForm setFooEvents ={setFooEvents}/>
+            <div>
+              <Users users ={users} setTarget = {setTarget} userTarget = {userTarget} setPrivate ={setPrivate} verify ={verify}></Users>
+            </div>
+            <div>
+              <MessageBox verify = {verify} privateMessage ={privateMessage} setPrivate ={setPrivate} userTarget ={userTarget}></MessageBox>
+              <ConnectionState isConnected={ isConnected }  />
+              <Events events={ fooEvents } setEvents = {setFooEvents} />
+              <ConnectionManager setUsers = {setUsers} users = {users}  setIsConnected= {setIsConnected} />
+              <MyForm setFooEvents ={setFooEvents}/>
+            </div>
           </div>
           ))
        }

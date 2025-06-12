@@ -62,10 +62,14 @@ button:focus-visible {
 .chatMessages{
   width: 1200px;
   height: 800px;
+  overflow-y: scroll
 }
 .messageSend{
   justify-self: end;
  
+}
+.Main{
+  display: flex;
 }
 @media (prefers-color-scheme: light) {
   :root {
