@@ -1,7 +1,7 @@
 module.exports = function(io){
   io.on('connection', (socket) => {
     console.log(`User ${socket.user.username} connected`);
-    io.emit('responses', {msg:`User ${socket.user.username} connected`,username:socket.user.username});
+
     let users = [];
     for (let [id,sock] of io.of("/").sockets){
       users.push({
@@ -29,7 +29,6 @@ module.exports = function(io){
 
     socket.on('disconnect',()=>{
       console.log(`User ${socket.user.username} disconnected`);
-      io.emit('responses',{msg:`User ${socket.user.username} disconnected`,username:socket.user.username});
       users = [];
       for (let [id,sock] of io.of("/").sockets){
         users.push({
