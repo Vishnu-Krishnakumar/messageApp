@@ -7,12 +7,12 @@ export function ConnectionManager({users,setUsers,setIsConnected}) {
     if (localStorage.getItem('authToken')) {
       socket.connect();
       let token = localStorage.getItem('authToken');
-      console.log(token);
+
       socket.auth.token = token;
       socket.emit('authentication',  token );
       socket.on('users',(newUser)=>{
         setUsers(newUser);
-        console.log(users);
+
         setIsConnected(true);
       })
       

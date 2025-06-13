@@ -1,6 +1,7 @@
 import { register } from "../serverUtils/server";
-
+import { useNavigate } from 'react-router-dom';
 function Register(){
+  const navigate = useNavigate();
   async function registration(formData){
     let response = await register(formData);
     if(response === true){

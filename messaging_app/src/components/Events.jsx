@@ -5,7 +5,7 @@ import { socket } from '../socket';
 export function Events({ events,setEvents }) {
   useEffect(()=>{
     const listener = ({ msg, username }) => {
-      console.log(username);
+
       setEvents(prev => [...prev, { msg, username }]);
     };
     socket.on('responses', listener);

@@ -11,7 +11,7 @@ export function MyForm({setFooEvents}) {
     
     socket.timeout(5000).emit('submission', value, () => {
       setIsLoading(false);
-      console.log(value)
+
     });
  
   }

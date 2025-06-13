@@ -2,24 +2,27 @@ import { useEffect } from 'react';
 import { socket } from '../socket';
 import { retrieveMessages } from '../serverUtils/server';
 export function Users({users,setTarget,userTarget,setPrivate,verify}){
-    console.log(users);
+
     async function test(e){
-      console.log(e.target.id);
+
       let socketId = '';
       let clickedId = parseInt(e.target.dataset.userId);
       for(const user of users){
-        console.log(user);
+
         if(user.userID === parseInt(clickedId)){
           socketId = user.socketId;
         }
       }
       setTarget({id:clickedId,socketId:socketId,userName:e.target.dataset.userName});
-      console.log(userTarget);
-      const messages = await retrieveMessages(userTarget.id,verify.user.id);
+
+      const messages = await retrieveMessages(clickedId,verify.user.id);
       setPrivate([]);
+      let formattedMessages = [];
       for(const message of messages.userMessages){
-        setPrivate(privateMessage =>[...privateMessage,{msg:message.message,userName:message.userName}]);
+        formattedMessages.push({msg:message.message,userName:message.userName});
       }
+      setPrivate(formattedMessages);
+
     }
 
   return (
@@ -27,10 +30,12 @@ export function Users({users,setTarget,userTarget,setPrivate,verify}){
     <h2>Users Online</h2>
     <ul className='usersList'>
       {
-        users.map((user,index)=>
-            
-              <li onClick = {test} key ={user.userID} data-user-id = {user.userID} data-user-name = {user.userName}>{user.userName}</li>
-        )
+        users.map((user,index)=>{
+          if (verify.user.id === user.userID) return null;
+          return (
+            <li onClick = {test} key ={user.userID} data-user-id = {user.userID} data-user-name = {user.userName}>{user.userName}</li> 
+          )
+        }) 
       }
     </ul>  
     </div> 

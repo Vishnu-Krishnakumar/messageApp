@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #793939;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -58,11 +58,21 @@ button:focus-visible {
   flex-direction: column;
   width:1200px;
   height: 800px;
+  padding:20px;
 }
 .chatMessages{
-  width: 1200px;
+  max-width: 1200px;
   height: 800px;
-  overflow-y: scroll
+  text-align: start;
+  overflow-y: scroll;
+
+}
+.chatMessages * {
+  overflow-anchor:none;
+}
+#anchor {
+  overflow-anchor: auto;
+  height: 1px;
 }
 .messageSend{
   justify-self: end;
@@ -70,6 +80,24 @@ button:focus-visible {
 }
 .Main{
   display: flex;
+}
+.receiver{
+  background-color: #397979;
+  border-radius: 20px;
+  padding: 5px;
+  
+}
+.sender{
+  background-color:#597939;
+  border-radius: 20px;
+  padding: 5px;
+}
+.user{
+  padding: 20px;
+  text-align: start;
+}
+.messageSend{
+  padding:20px;
 }
 @media (prefers-color-scheme: light) {
   :root {

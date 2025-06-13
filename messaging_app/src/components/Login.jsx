@@ -4,7 +4,7 @@ function Login({setVerify}) {
 
   async function logIn(formData) {
     const verified = await log(formData);
-    console.log(verified);
+
     if(verified.verify){
       setVerify(verified);
     }

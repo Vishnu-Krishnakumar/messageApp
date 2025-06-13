@@ -16,7 +16,7 @@ import MessageBox from './components/MessageBox.jsx'
 function App() {
   const [count, setCount] = useState(0);
   const [userTarget,setTarget] = useState({});
-  const [verify, setVerify] = useState({id:-1,verify:false});
+  const [verify, setVerify] = useState({user:null,verify:false});
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [fooEvents, setFooEvents] = useState([]);
   const [users,setUsers] = useState([]);
@@ -25,23 +25,23 @@ function App() {
 
     try{
       let token = localStorage.getItem("authToken");
-      console.log(token);
+
       if(token === null) {
-        setVerify({id:-1,verify:false});
+        setVerify({user:null,verify:false});
         return;
       } 
       const currentTimestamp = Math.floor(Date.now() / 1000);
       token = token.split('.');
       let exp = JSON.parse(atob(token[1])).exp;
       token = JSON.parse(atob(token[1])).user;
-      console.log(token);
+
       if(exp < currentTimestamp){
         localStorage.removeItem("authToken");
         return console.log("token expired");
         
       }
       else{
-         setVerify({id:token.id,verify:true});
+         setVerify({user:token,verify:true});
       } 
     }catch(error){console.log(error)}
 
