@@ -78,16 +78,16 @@ async function findMessages(data){
     }
   })
 
-  let userMessages = []
+  let userMessages =[];
+  const userMap = new Map();
+
+  for(const user of users){
+    userMap.set(user.id,user.username);
+  }
+  
   for(const message of messages){
-    let userName = '';
-
-    for(const user of users){
-
-      if (message.senderId === user.id) userName = user.username 
-    }
     userMessages.push({
-      userName:userName,
+      userName:userMap.get(message.senderId),
       message:message.message,
       receiverId:message.receiverId,
       senderId:message.senderId,
