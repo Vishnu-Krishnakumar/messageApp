@@ -1,4 +1,4 @@
-#Messaging_app
+## Messaging_app
 
 A web based real time messaging app using websockets(socketIO). Create an account and start messaging people who are online!
 
