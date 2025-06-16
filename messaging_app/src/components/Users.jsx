@@ -22,18 +22,17 @@ export function Users({users,setTarget,userTarget,setPrivate,verify}){
         formattedMessages.push({msg:message.message,userName:message.userName});
       }
       setPrivate(formattedMessages);
-
     }
 
   return (
-    <div className='user' >
+    <div className='users' >
     <h2>Users Online</h2>
     <ul className='usersList'>
       {
         users.map((user,index)=>{
           if (verify.user.id === user.userID) return null;
           return (
-            <li onClick = {test} key ={user.userID} data-user-id = {user.userID} data-user-name = {user.userName}>{user.userName}</li> 
+            <li className ='user' onClick = {test} key ={user.userID} data-user-id = {user.userID} data-user-name = {user.userName}>{user.userName}</li> 
           )
         }) 
       }

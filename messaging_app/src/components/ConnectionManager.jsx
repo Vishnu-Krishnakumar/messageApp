@@ -27,9 +27,9 @@ export function ConnectionManager({users,setUsers,setIsConnected}) {
   }
 
   return (
-    <>
+    <div className='connectionManager'>
       <button onClick={ connect }>Connect</button>
       <button onClick={ disconnect }>Disconnect</button>
-    </>
+    </div>
   );
 }

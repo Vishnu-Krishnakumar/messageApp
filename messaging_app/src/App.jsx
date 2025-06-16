@@ -14,7 +14,6 @@ import { Users } from './components/Users.jsx';
 import LogOut  from './components/LogOut.jsx';
 import MessageBox from './components/MessageBox.jsx'
 function App() {
-  const [count, setCount] = useState(0);
   const [userTarget,setTarget] = useState({});
   const [verify, setVerify] = useState({user:null,verify:false});
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -76,7 +75,7 @@ function App() {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
       socket.off('foo', onFooEvent);
-
+  
     };
     }, []);
 
@@ -95,9 +94,10 @@ function App() {
             </div>
             <div>
               <MessageBox verify = {verify} privateMessage ={privateMessage} setPrivate ={setPrivate} userTarget ={userTarget}></MessageBox>
+              <ConnectionManager setUsers = {setUsers} users = {users}  setIsConnected= {setIsConnected} />
               <ConnectionState isConnected={ isConnected }  />
               <Events events={ fooEvents } setEvents = {setFooEvents} />
-              <ConnectionManager setUsers = {setUsers} users = {users}  setIsConnected= {setIsConnected} />
+              
               <MyForm setFooEvents ={setFooEvents}/>
             </div>
           </div>

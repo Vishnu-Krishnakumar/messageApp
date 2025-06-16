@@ -17,9 +17,12 @@ export function MyForm({setFooEvents}) {
   }
 
   return (
-    <form onSubmit={ onSubmit }>
-      <input onChange={ e => setValue(e.target.value) } />
-      <button type="submit" disabled={ isLoading }>Submit</button>
-    </form>
+    <div className='globalSubmit'>
+       <form onSubmit={ onSubmit }>
+        <input onChange={ e => setValue(e.target.value) } />
+        <button type="submit" disabled={ isLoading }>Submit</button>
+      </form>
+    </div>
+   
   );
 }

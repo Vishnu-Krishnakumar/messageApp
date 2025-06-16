@@ -15,15 +15,15 @@ export function Events({ events,setEvents }) {
   },[]);
 
   return (
-    <div>
-    <h2>Global Chat</h2>
-    <ul>
-    {
-      events.map((event, index) =>
-        <li key={ index }>{ event.username } : {event.msg}</li>
-      )
-    }
-    </ul>
+    <div className="globalChat">
+      <h2>Global Chat</h2>
+      <ul>
+      {
+        events.map((event, index) =>
+          <li key={ index }>{ event.username } : {event.msg}</li>
+        )
+      }
+      </ul>
     </div>
   );
 }

@@ -7,7 +7,7 @@ function LogOut({setVerify}){
     }
     return(
       <>
-        <nav className="LogOut">
+        <nav className="logOut">
           <a href="" onClick={log}>Log Out</a>
         </nav>
       </>

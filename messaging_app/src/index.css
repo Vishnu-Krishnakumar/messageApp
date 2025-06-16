@@ -74,9 +74,28 @@ button:focus-visible {
   overflow-anchor: auto;
   height: 1px;
 }
+.connectionManager *{
+  margin: 20px;
+}
+.globalChat  {
+  width: 1200px;
+  margin:20px;
+}
+.globalChat li{
+  text-align: start;
+}
+.globalSubmit *{
+  margin:20px;
+}
+.logOut {
+  padding:20px;
+}
 .messageSend{
   justify-self: end;
  
+}
+.messageSend *{
+  margin: 20px;
 }
 .Main{
   display: flex;
@@ -92,9 +111,17 @@ button:focus-visible {
   border-radius: 20px;
   padding: 5px;
 }
-.user{
+.users{
   padding: 20px;
   text-align: start;
+}
+.user{
+  padding:20px;
+  border-radius: 5px;
+}
+.user:hover{
+  cursor: pointer;
+  background-color: #535bf2;
 }
 .messageSend{
   padding:20px;
